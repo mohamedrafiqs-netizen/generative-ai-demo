@@ -82,3 +82,22 @@ if __name__ == "__main__":
     print(f"Diffusion: Noised data shape {noisy_sample.shape}")
     
     print("\nSUCCESS: All models initialized and executed forward pass.")
+
+from torchvision import datasets, transforms
+from torch.utils.data import DataLoader
+
+def load_my_data(data_path='./my_dataset', batch_size=32):
+    # Define how to transform your images for the AI
+    transform = transforms.Compose([
+        transforms.Grayscale(num_output_channels=1), # If using B&W model
+        transforms.Resize((28, 28)),                 # Resize to match model input
+        transforms.ToTensor(),                       # Convert to AI numbers
+        transforms.Normalize((0.5,), (0.5,))         # Normalize to range [-1, 1]
+    ])
+
+    # Load data from the folder
+    # Note: ImageFolder requires the structure root/class/image.jpg
+    dataset = datasets.ImageFolder(root=data_path, transform=transform)
+    
+    loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+    return loader
